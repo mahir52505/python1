@@ -1,25 +1,28 @@
-import random
+# Fixed locations for the boxes
+box1_location = 3  # Correct location for Box 1
+box2_location = 7  # Correct location for Box 2
+box3_location = 9  # Correct location for Box 3
 
-# Randomly assign locations for the boxes
-locations = [random.randint(1, 10) for _ in range(3)]
-weights = [213, 250, 250]  # Weights of the boxes
-total_weight = sum(weights)
+# Weights of the boxes
+box1_weight = 213
+box2_weight = 250
+box3_weight = 250
+total_weight = box1_weight + box2_weight + box3_weight
 
-print("Martian Cargo Finder")
-print("Find the 3 hidden boxes by guessing their kilometer marks!")
+print("Welcome to the Martian Cargo Finder!")
+print("The Martians have hidden 3 boxes at specific kilometer marks.")
+print("Your task is to guess the correct kilometer marks to find all the boxes.\n")
 
 while True:
-    # Get user guesses
-    guess1 = int(input("Enter location for Box 1: "))
-    guess2 = int(input("Enter location for Box 2: "))
-    guess3 = int(input("Enter location for Box 3: "))
+    # Ask the user for their guesses
+    guess1 = int(input("Enter your guess for Box 1: "))
+    guess2 = int(input("Enter your guess for Box 2: "))
+    guess3 = int(input("Enter your guess for Box 3: "))
 
-    # Check if guesses are correct
-    if [guess1, guess2, guess3] == locations:
-        print(f"Congratulations! You found all the boxes.")
+    # Check if the guesses match the correct locations
+    if guess1 == box1_location and guess2 == box2_location and guess3 == box3_location:
+        print("\nCongratulations! You found all the boxes!")
         print(f"The total weight of the boxes is {total_weight} kg.")
-        break
+        break  # Exit the loop when all guesses are correct
     else:
-        print("Wrong guesses! The boxes have moved to new locations.")
-        # Move boxes to new random locations
-        locations = [random.randint(1, 10) for _ in range(3)]
+        print("\nWrong guesses! Try again.\n")
