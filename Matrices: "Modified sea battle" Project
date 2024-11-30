@@ -1,0 +1,92 @@
+import random
+
+# Create an empty 7x7 field
+def create_field():
+    return [[' ' for _ in range(7)] for _ in range(7)]
+
+# Display the field
+def display_field(field):
+    print("  A B C D E F G")
+    for i, row in enumerate(field):
+        print(f"{i+1} " + " ".join(row))
+
+# Randomly place ships on the field
+def place_ships(field):
+    ships = [(3, "3"), (2, "2"), (2, "2"), (1, "1"), (1, "1"), (1, "1"), (1, "1")]
+    for size, symbol in ships:
+        while True:
+            direction = random.choice(["H", "V"])  # Horizontal or Vertical
+            x = random.randint(0, 6)
+            y = random.randint(0, 6)
+            if direction == "H" and y + size <= 7:
+                if all(field[x][y + i] == ' ' for i in range(size)):
+                    for i in range(size):
+                        field[x][y + i] = symbol
+                    break
+            elif direction == "V" and x + size <= 7:
+                if all(field[x + i][y] == ' ' for i in range(size)):
+                    for i in range(size):
+                        field[x + i][y] = symbol
+                    break
+
+# Convert input like "B5" to coordinates (1, 4)
+def get_coordinates(shot):
+    try:
+        letter = shot[0].upper()
+        number = int(shot[1]) - 1
+        x = number
+        y = ord(letter) - ord('A')
+        if 0 <= x < 7 and 0 <= y < 7:
+            return x, y
+    except (IndexError, ValueError):
+        pass
+    return None
+
+# Main game logic
+def play_game():
+    print("Welcome to Battleship!")
+    player_name = input("Enter your name: ")
+
+    field = create_field()
+    hidden_field = create_field()
+    place_ships(hidden_field)
+
+    attempts = 0
+    hits = 0
+    total_ship_parts = sum([3, 2, 2, 1, 1, 1, 1])  # Total parts of all ships
+
+    while hits < total_ship_parts:
+        display_field(field)
+        print(f"Attempts: {attempts}")
+
+        # Get the player's shot
+        shot = input("Enter your shot (e.g., A3): ").strip()
+        target = get_coordinates(shot)
+
+        if not target:
+            print("Invalid input! Enter a letter (A-G) and a number (1-7).")
+            continue
+
+        x, y = target
+        if field[x][y] != ' ':
+            print("You already shot here! Try again.")
+            continue
+
+        attempts += 1
+
+        # Check if the shot hits or misses
+        if hidden_field[x][y] != ' ':
+            print("Hit!")
+            field[x][y] = 'X'
+            hidden_field[x][y] = ' '
+            hits += 1
+        else:
+            print("Miss!")
+            field[x][y] = 'O'
+
+    print("Congratulations! You sank all the ships!")
+    print(f"Total attempts: {attempts}")
+
+# Run the game
+play_game()
+
